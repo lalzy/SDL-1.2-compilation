@@ -9,15 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
+      - name: Setup MinGW
+        uses: msys2/setup-msys2@v2
 
-      - name: Build
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
         run: |
-          cd VisualC
-          msbuild SDL.sln /p:Configuration=Release
-          mkdir ../out
-          cp Release/SDL.dll ../out/
+          ./configure
+          make
+          mkdir -p out
+          cp build/.libs/SDL.dll out/
 
       - name: Upload
         uses: actions/upload-artifact@v4
