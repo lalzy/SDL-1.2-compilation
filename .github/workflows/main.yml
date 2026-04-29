@@ -22,22 +22,14 @@ jobs:
           mkdir -p out
           cp build/.libs/libSDL*.so* out/
 
-      - name: Build (Mac)
-        if: runner.os == 'macOS'
-        run: |
-          ./configure
-          make
-          mkdir -p out
-          cp build/.libs/libSDL*.dylib out/
-
       - name: Build (Windows)
         if: runner.os == 'Windows'
         run: |
-          cmake -S . -B build
-          cmake --build build --config Release
-          mkdir out
-          cp build/Release/SDL.dll out/
-
+          cd VisualC
+          msbuild SDL.sln /p:Configuration=Release
+          mkdir ../out
+          cp Release/SDL.dll ../out/
+          
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
